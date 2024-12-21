@@ -42,20 +42,20 @@ def execute_queries(sql_query, sqlalchemy_query):
     # Загальний час
     total_sqlite_time = sum(sqlite_times)
     total_sqlalchemy_time = sum(sqlalchemy_times)
-    print(total_sqlalchemy_time)
-    print(total_sqlite_time)
+    print(f"{total_sqlalchemy_time:.2f} - загальний час запиту на SQLAlchemy")
+    print(f"{total_sqlite_time:.2f} - загальний час запиту на SQLite")
 
     # Обчислення відсотків
     for i in range(len(sqlite_times)):
-        percent1 = ((sqlite_times[i] - sqlalchemy_times[i])/total_sqlalchemy_time)
-        percent2 = ((sqlite_times[i] - sqlalchemy_times[i])/total_sqlite_time)
+        percent1 = ((sqlite_times[i] - sqlalchemy_times[i])/total_sqlalchemy_time)*100
+        percent2 = ((sqlite_times[i] - sqlalchemy_times[i])/total_sqlite_time)*100
         if percent1 > 0 and percent2 > 0:
-            print(f"SqlAlchemy працює на {percent1}% або {percent2}% повільніше ніж Sqlite")
+            print(f"Sqlite працює на {(percent1):.3f}% або {(percent2):.3f}% повільніше ніж SqlAlchemy")
         elif percent1 < 0 and percent2 < 0:
-            print(f"Sqlite працює на {abs(percent1)}% або {abs(percent2)}% повільніше ніж SqlAlchemy")
+            print(f"SqlAlchemy працює на {abs(percent1):.3f}% або {abs(percent2):.3f}% повільніше ніж Sqlite")
             
-    percent_sql = abs((total_sqlite_time - total_sqlalchemy_time) / total_sqlalchemy_time)*100
-    percent_sqlalchemy = abs((total_sqlite_time - total_sqlalchemy_time) / total_sqlite_time)*100
+    percent_sql = ((total_sqlite_time - total_sqlalchemy_time) / total_sqlalchemy_time)*100
+    percent_sqlalchemy = ((total_sqlite_time - total_sqlalchemy_time) / total_sqlite_time)*100
 
     # Запис результатів
     time_sql.append(total_sqlite_time)
@@ -67,9 +67,9 @@ def execute_queries(sql_query, sqlalchemy_query):
 
 
 # Звертання до функції надаючи по одному запиту обох моделей
-execute_queries(query1, queries[0])  # Запрос 1
-execute_queries(query2, queries[1])  # Запрос 2
-execute_queries(query3, queries[2])  # Запрос 3
+execute_queries(query1, queries[0])  # Запит 1
+execute_queries(query2, queries[1])  # Запит 2
+execute_queries(query3, queries[2])  # Запит 3
 
 # Закриття сесій
 sqlite_connection.close()
